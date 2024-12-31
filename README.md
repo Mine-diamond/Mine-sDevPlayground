@@ -68,6 +68,6 @@
 
 ---
 
-## **内容**
+## **更新内容**
 
-1. mainFrame:一个数字华容道游戏（16puzzle）,打开程序后点击帮助获取具体信息。
+[changelog(CHANGELOG.MD)](https://github.com/Mine-diamond/Mine-sDevPlayground/blob/main/CHANGELOG.md)
