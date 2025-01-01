@@ -4,22 +4,32 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Minesweeper extends JFrame {
+public class GameUI extends JFrame {
 
     boolean ifSettingFrameOpen = false;
     boolean ifHelpFrameOpen = false;
+    boolean ifHistoryFrameOpen = false;
 
-        Minesweeper() {
+        GameUI() {
             initialize();
-
         }
 
         public void initialize(){
             setTitle("扫雷游戏");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setSize(500, 500);
+            setSize(53*GameLogic.col,43*GameLogic.row  + 85);
             setLocationRelativeTo(null);
+            setResizable(false);
             setLayout(new BorderLayout());
+
+            drawFrame();
+
+            setVisible(true);
+        }
+
+        public void drawFrame(){
+            getContentPane().removeAll();
+            setSize(53*GameLogic.col,43*GameLogic.row  + 85);
 
             JToolBar toolBar = new JToolBar();
             toolBar.setFloatable(false);
@@ -49,6 +59,18 @@ public class Minesweeper extends JFrame {
             });
             toolBar.add(buttonHelp);
 
+            toolBar.addSeparator();
+
+            JButton ButtonHistory = new JButton("历史记录");
+            ButtonHistory.setFocusable(false);
+            ButtonHistory.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    historyFrame();
+                }
+            });
+            toolBar.add(ButtonHistory);
+
             JPanel panelBottom = new JPanel();
             panelBottom.setLayout(new GridLayout(1,3));
             add(panelBottom, BorderLayout.SOUTH);
@@ -75,7 +97,29 @@ public class Minesweeper extends JFrame {
             panelBottom.add(buttonReset);
             panelBottom.add(labelTime);
 
-            setVisible(true);
+            JPanel panelGrid = new JPanel();
+            panelGrid.setLayout(new GridLayout(GameLogic.row,GameLogic.col));
+            gridArea(panelGrid);
+            add(panelGrid, BorderLayout.CENTER);
+
+
+        }
+
+        public void gridArea(JPanel panel){
+            for (int i = 0; i < GameLogic.col; i++) {
+                for (int j = 0; j < GameLogic.row; j++) {
+                    JButton button = new JButton("旗");
+                    System.out.println(10*i+j+1);
+                    button.setFocusable(false);
+                    button.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+
+                        }
+                    });
+                    panel.add(button);
+                }
+            }
         }
 
 
@@ -99,13 +143,65 @@ public class Minesweeper extends JFrame {
             toolBarCheck.setFloatable(false);
             settingframe.add(toolBarCheck, BorderLayout.SOUTH);
 
+
+
+            JPanel panelGrid = new JPanel();
+            panelGrid.setLayout(new FlowLayout(FlowLayout.LEFT));
+            settingframe.add(panelGrid, BorderLayout.NORTH);
+
+            JPanel panelGridInter = new JPanel();
+            panelGridInter.setLayout(new GridLayout(2,2));
+            panelGrid.add(panelGridInter);
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.anchor = GridBagConstraints.WEST;
+            gbc.fill = GridBagConstraints.NONE; // 不拉伸，保持组件最小大小
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.weightx = 0.0; // 列宽权重
+            gbc.weighty = 0.0; // 行高权重（设置为较大值）
+            JLabel labelRow = new JLabel("行数：");
+            panelGrid.add(labelRow,gbc);
+            gbc.gridx = 1;
+            gbc.gridy = 0;
+            JTextField textFieldRow = new JTextField();
+            textFieldRow.setPreferredSize(new Dimension(50, 20));
+            panelGrid.add(textFieldRow,gbc);
+            gbc.gridx = 0;
+            gbc.gridy = 1;
+            JLabel labelCon = new JLabel("列数：");
+            panelGrid.add(labelCon,gbc);
+            gbc.gridx = 1;
+            gbc.gridy = 1;
+            JTextField textFieldCon = new JTextField();
+            textFieldCon.setPreferredSize(new Dimension(50, 20));
+            panelGrid.add(textFieldCon,gbc);
+
             JButton buttonYes = new JButton("确认");
             buttonYes.setFocusable(false);
             buttonYes.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    try {
+                        if(Integer.parseInt(textFieldRow.getText()) > 3 && Integer.parseInt(textFieldRow.getText()) < 20){
+                            GameLogic.row = Integer.parseInt(textFieldRow.getText());
+                            System.out.println("转换后的整数为: " + GameLogic.row);
+                        }
+                    } catch (NumberFormatException e1) {
+                        System.out.println("无法将字符串转换为整数: " + e1.getMessage());
+                    }
+                    try {
+                        if (Integer.parseInt(textFieldCon.getText()) > 3 && Integer.parseInt(textFieldCon.getText()) < 20) {
+                            GameLogic.col = Integer.parseInt(textFieldCon.getText());
+                            System.out.println("转换后的整数为: " + GameLogic.col);
+                        }
+                    } catch (NumberFormatException e1) {
+                        System.out.println("无法将字符串转换为整数: " + e1.getMessage());
+                    }
                     settingframe.dispose();
                     ifSettingFrameOpen = false;
+
+                    drawFrame();
                 }
             });
             toolBarCheck.add(buttonYes);
@@ -117,6 +213,8 @@ public class Minesweeper extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
+                    settingframe.dispose();
+                    ifSettingFrameOpen = false;
                 }
             });
             toolBarCheck.add(buttonNo);
@@ -199,6 +297,52 @@ public class Minesweeper extends JFrame {
             });
 
 
+        }
+
+        public void historyFrame(){
+            if(ifHistoryFrameOpen){
+                return;
+            }
+
+            JFrame historyframe = new JFrame();
+            historyframe.setSize(200, 200);
+            historyframe.setLocationRelativeTo(null);
+            historyframe.setLayout(null);
+            historyframe.setResizable(false);
+            historyframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            ifHistoryFrameOpen = true;
+
+            Runnable setAlwaysOnTop = () -> {
+                boolean isFrame2Focused = historyframe.isFocused();
+                boolean isFrame1Focused = this.isFocused();
+                historyframe.setAlwaysOnTop(isFrame2Focused || isFrame1Focused);
+            };
+
+
+
+            // 添加焦点监听器到 frame2 和 frame1
+            WindowFocusListener focusListener = new WindowFocusListener() {
+                @Override
+                public void windowGainedFocus(WindowEvent e) {
+                    setAlwaysOnTop.run();
+                }
+
+                @Override
+                public void windowLostFocus(WindowEvent e) {
+                    setAlwaysOnTop.run();
+                }
+            };
+
+            //settingframe.addWindowFocusListener(focusListener);
+            this.addWindowFocusListener(focusListener);
+
+            historyframe.setVisible(true);
+            historyframe.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    ifHistoryFrameOpen = false;
+                }
+            });
         }
 
 
