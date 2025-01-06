@@ -71,3 +71,44 @@
 ## **更新内容**
 
 [changelog.md](https://github.com/Mine-diamond/Mine-sDevPlayground/blob/main/CHANGELOG.md)
+
+下面是无聊时摸索github支持的渲染格式。
+---
+
+> [!NOTE]
+>
+> 这是一个提示信息，请用户留意。  
+
+> [!WARNING]
+>
+> 这是一个警告信息，请用户留意。  
+
+> [!TIP]
+>
+> 这是一个技巧提示，用于提供有用的建议。
+
+<div style="padding: 1em; border-left: 4px solid blue; background: #f0f0f0;">
+<strong>Note:</strong> 这是一个提示信息。
+</div>
+
+<details>
+<summary>点击展开</summary>
+
+这是隐藏的内容🙃。
+
+</details>
+
+<div align="center" style="color:#FF5722; font-size:18px; font-weight:bold;">
+这是居中的内容。
+</div>
+
+<div style="border-left: 4px solid #0076D6; padding: 0.5em; background-color: #f9f9f9;">
+<strong>Note</strong>  
+<p>这是？</p>
+</div>
+<details>
+<summary>查看</summary>
+
+这里什么都没有:)
+
+</details>
