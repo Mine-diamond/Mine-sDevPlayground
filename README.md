@@ -70,4 +70,4 @@
 
 ## **更新内容**
 
-[changelog(CHANGELOG.MD)](https://github.com/Mine-diamond/Mine-sDevPlayground/blob/main/CHANGELOG.md)
+[changelog.md](https://github.com/Mine-diamond/Mine-sDevPlayground/blob/main/CHANGELOG.md)
